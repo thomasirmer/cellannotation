@@ -1,24 +1,16 @@
-import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-import javax.swing.ComboBoxModel;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-import javax.swing.JSpinner;
-import javax.swing.SpinnerModel;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.ListDataListener;
-import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 
-import sun.lwawt.macosx.CImage;
 
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-
-
+@SuppressWarnings("serial")
 public class CellTypeEditGUI extends JFrame {
 	
 	private CellAnnotationGUI annotationGUI;
@@ -28,8 +20,8 @@ public class CellTypeEditGUI extends JFrame {
 	private JTextField txfSelectionSize;
 	private JComboBox<String> comboBoxColor;
 	
-	public CellTypeEditGUI(final CellAnnotationGUI annotationGUI) {
-		this.annotationGUI= annotationGUI; 
+	public CellTypeEditGUI(final CellAnnotationGUI gui) {
+		this.annotationGUI = gui; 
 		this.editGUI = this;
 		
 		setTitle("Edit cell type");
@@ -70,9 +62,7 @@ public class CellTypeEditGUI extends JFrame {
 		JButton btnOk = new JButton("Ok");
 		btnOk.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				annotationGUI.setCellTypeProperties(txfCellName.getText(),
-						Integer.parseInt(txfSelectionSize.getText()),
-						(String)comboBoxColor.getSelectedItem());
+				annotationGUI.setCellTypeProperties(txfCellName.getText(), Integer.parseInt(txfSelectionSize.getText()), (String)comboBoxColor.getSelectedItem());
 				editGUI.dispose();
 			}
 		});

@@ -11,7 +11,6 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.border.EtchedBorder;
 
-
 @SuppressWarnings("serial")
 public class CellAnnotationGUI extends JFrame {
 	
