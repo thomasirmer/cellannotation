@@ -1,7 +1,11 @@
+import ij.IJ;
+
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -15,6 +19,7 @@ import javax.swing.border.EtchedBorder;
 public class CellAnnotationGUI extends JFrame {
 	
 	private CellAnnotationGUI guiReference;
+	private Cell_Annotation appReference;
 	
 	private final ButtonGroup buttonGroupCellTypes = new ButtonGroup();
 
@@ -29,9 +34,19 @@ public class CellAnnotationGUI extends JFrame {
 	private JLabel lblColor2;
 	private JLabel lblColor3;
 	
-	public CellAnnotationGUI() {
-		
+	public CellAnnotationGUI(final Cell_Annotation application) {
+		appReference = application;
 		guiReference = this;
+		
+		this.addWindowListener(new WindowListener() {
+			public void windowOpened(WindowEvent e) {}
+			public void windowIconified(WindowEvent e) {}
+			public void windowDeiconified(WindowEvent e) {}
+			public void windowDeactivated(WindowEvent e) {}
+			public void windowClosing(WindowEvent e) { appReference.dispose(); }
+			public void windowClosed(WindowEvent e) {}
+			public void windowActivated(WindowEvent e) {}
+		});
 		
 		setTitle("Cell Annotation");
 		setResizable(false);
