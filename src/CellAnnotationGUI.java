@@ -35,6 +35,7 @@ public class CellAnnotationGUI extends JFrame {
 	private JLabel lblColor3;
 	
 	public CellAnnotationGUI(final Cell_Annotation application) {
+		setAlwaysOnTop(true);
 		appReference = application;
 		guiReference = this;
 		

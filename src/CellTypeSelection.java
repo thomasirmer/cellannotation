@@ -11,10 +11,10 @@ public class CellTypeSelection {
 		this.cellName = cellName;
 		this.selectionSize = selectionSize;
 		
-		if (selectionColor == "Red") 			this.selectionColor = Color.RED;
-		else if (selectionColor == "Orange") 	this.selectionColor = Color.ORANGE;
-		else if (selectionColor == "Yellow") 	this.selectionColor = Color.YELLOW;
-		else if (selectionColor == "Green") 	this.selectionColor = Color.GREEN;
-		else if (selectionColor == "Blue") 		this.selectionColor = Color.BLUE;
+		if (selectionColor == "Red") 			this.selectionColor = new Color(1, 0, 0, 0.75f);
+		else if (selectionColor == "Orange") 	this.selectionColor = new Color(1, 0.5f, 0, 0.75f);
+		else if (selectionColor == "Yellow") 	this.selectionColor = new Color(1, 1, 0, 0.75f);
+		else if (selectionColor == "Green") 	this.selectionColor = new Color(0, 1, 0, 0.75f);
+		else if (selectionColor == "Blue") 		this.selectionColor = new Color(0, 0, 1, 0.75f);
 	}
 }
