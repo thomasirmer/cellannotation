@@ -1,4 +1,5 @@
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,9 +14,11 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.ListCellRenderer;
 import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListDataListener;
+import javax.swing.border.EtchedBorder;
 
 @SuppressWarnings("serial")
 public class CellAnnotationGUI extends JFrame {
@@ -48,6 +51,7 @@ public class CellAnnotationGUI extends JFrame {
 		getContentPane().setLayout(null);
 		
 		panelCellTypesList = new JPanel();
+		panelCellTypesList.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		panelCellTypesList.setBounds(6, 6, 388, 339);
 		getContentPane().add(panelCellTypesList);
 		panelCellTypesList.setLayout(null);
@@ -62,21 +66,22 @@ public class CellAnnotationGUI extends JFrame {
 		panelCellTypesList.add(scrollPaneCellList);
 		
 		listCellTypes = new JList<CellType>();
+		
 		cellTypesModel = new DefaultListModel<CellType>();
-		cellTypesModel.addElement(new CellType("atut", "atypische Urothelzelle", Color.RED));
-		cellTypesModel.addElement(new CellType("ut"	 , "Urothelzelle normal", Color.RED));
-		cellTypesModel.addElement(new CellType("tv"	 , "Urothelzelle tumorverdächtig low grade", Color.RED));
-		cellTypesModel.addElement(new CellType("tvh" , "Urothelzelle tumorverdächtig high grade", Color.RED));
-		cellTypesModel.addElement(new CellType("pe"	 , "Plattenepithelzelle normal", Color.RED));
-		cellTypesModel.addElement(new CellType("atpe", "atypisches Plattenepithel", Color.RED));
-		cellTypesModel.addElement(new CellType("af"	 , "Artefakt", Color.RED));
-		cellTypesModel.addElement(new CellType("kr"	 , "Kristall", Color.RED));
-		cellTypesModel.addElement(new CellType("bak" , "Bakterien", Color.RED));
-		cellTypesModel.addElement(new CellType("pi"	 , "Pilze", Color.RED));
-		cellTypesModel.addElement(new CellType("leu" , "Leukozyt", Color.RED));
-		cellTypesModel.addElement(new CellType("gan" , "Granulozyt", Color.RED));
-		cellTypesModel.addElement(new CellType("ery" , "Erythrozyt", Color.RED));
-		cellTypesModel.addElement(new CellType("pla" , "Plasmazelle", Color.RED));
+		cellTypesModel.addElement(new CellType("ut"	 , "Urothelzelle normal"					, new Color(23,82,125)));
+		cellTypesModel.addElement(new CellType("atut", "atypische Urothelzelle"					, new Color(204,102,0)));
+		cellTypesModel.addElement(new CellType("tv"	 , "Urothelzelle tumorverdächtig low grade"	, new Color(204,51,0)));
+		cellTypesModel.addElement(new CellType("tvh" , "Urothelzelle tumorverdächtig high grade", new Color(204,0,0)));
+		cellTypesModel.addElement(new CellType("pe"	 , "Plattenepithelzelle normal"				, new Color(51,102,0)));
+		cellTypesModel.addElement(new CellType("atpe", "atypisches Plattenepithel"				, new Color(204,153,0)));
+		cellTypesModel.addElement(new CellType("af"	 , "Artefakt"								, new Color(51,51,51)));
+		cellTypesModel.addElement(new CellType("kr"	 , "Kristall"								, new Color(0,53,96)));
+		cellTypesModel.addElement(new CellType("bak" , "Bakterien"								, new Color(204,0,153)));
+		cellTypesModel.addElement(new CellType("pi"	 , "Pilze"									, new Color(153,102,51)));
+		cellTypesModel.addElement(new CellType("leu" , "Leukozyt"								, new Color(0,102,0)));
+		cellTypesModel.addElement(new CellType("gan" , "Granulozyt"								, new Color(51,102,51)));
+		cellTypesModel.addElement(new CellType("ery" , "Erythrozyt"								, new Color(102,102,153)));
+		cellTypesModel.addElement(new CellType("pla" , "Plasmazelle"							, new Color(0,102,102)));
 		
 		listCellTypes.setModel(cellTypesModel);
 		listCellTypes.setSelectedIndex(0);
@@ -122,6 +127,16 @@ public class CellAnnotationGUI extends JFrame {
 		});
 		btnAdd.setBounds(196, 304, 81, 29);
 		panelCellTypesList.add(btnAdd);
+		
+		JPanel panel = new JPanel();
+		panel.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		panel.setBounds(6, 357, 388, 215);
+		getContentPane().add(panel);
+		panel.setLayout(null);
+		
+		JLabel lblExportAnnotation = new JLabel("Export annotation");
+		lblExportAnnotation.setBounds(6, 6, 113, 16);
+		panel.add(lblExportAnnotation);
 	}
 
 	public CellType getSelectedCellType() {
