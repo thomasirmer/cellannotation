@@ -1,5 +1,3 @@
-import ij.IJ;
-
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -7,35 +5,31 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
-import javax.swing.ButtonGroup;
+import javax.swing.AbstractListModel;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.border.EtchedBorder;
+import javax.swing.JScrollPane;
+import javax.swing.ListModel;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListDataListener;
 
 @SuppressWarnings("serial")
 public class CellAnnotationGUI extends JFrame {
 	
-	private CellAnnotationGUI guiReference;
 	private Cell_Annotation appReference;
 	
-	private final ButtonGroup buttonGroupCellTypes = new ButtonGroup();
-
-	private JRadioButton rdbtnType3;
-	private JRadioButton rdbtnType2;
-	private JRadioButton rdbtnType1;
-
-	private JLabel lblpx1;
-	private JLabel lblpx2;
-	private JLabel lblpx3;
-	private JLabel lblColor1;
-	private JLabel lblColor2;
-	private JLabel lblColor3;
+	private JPanel panelCellTypesList;
+	private JList<CellType> listCellTypes;
+	private JScrollPane scrollPaneCellList;
+	private final DefaultListModel<CellType> cellTypesModel;
+	
+	private CellAnnotationGUI guiReference;
 	
 	public CellAnnotationGUI(final Cell_Annotation application) {
-		setAlwaysOnTop(true);
 		appReference = application;
 		guiReference = this;
 		
@@ -53,149 +47,88 @@ public class CellAnnotationGUI extends JFrame {
 		setResizable(false);
 		getContentPane().setLayout(null);
 		
-		JPanel panelCellTypes = new JPanel();
-		panelCellTypes.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		panelCellTypes.setForeground(Color.BLACK);
-		panelCellTypes.setBounds(6, 6, 388, 201);
-		getContentPane().add(panelCellTypes);
-		panelCellTypes.setLayout(null);
+		panelCellTypesList = new JPanel();
+		panelCellTypesList.setBounds(6, 6, 388, 339);
+		getContentPane().add(panelCellTypesList);
+		panelCellTypesList.setLayout(null);
 		
-		rdbtnType3 = new JRadioButton("Type 3");
-		buttonGroupCellTypes.add(rdbtnType3);
-		rdbtnType3.setBounds(6, 132, 146, 23);
-		panelCellTypes.add(rdbtnType3);
+		JLabel lblSelectCellTypeList = new JLabel("Select Cell Type");
+		lblSelectCellTypeList.setBounds(6, 6, 106, 16);
+		lblSelectCellTypeList.setFont(new Font("Lucida Grande", Font.BOLD, 13));
+		panelCellTypesList.add(lblSelectCellTypeList);
 		
-		rdbtnType2 = new JRadioButton("Type 2");
-		buttonGroupCellTypes.add(rdbtnType2);
-		rdbtnType2.setBounds(6, 97, 146, 23);
-		panelCellTypes.add(rdbtnType2);
+		scrollPaneCellList = new JScrollPane();
+		scrollPaneCellList.setBounds(6, 34, 376, 258);
+		panelCellTypesList.add(scrollPaneCellList);
 		
-		rdbtnType1 = new JRadioButton("Type 1");
-		buttonGroupCellTypes.add(rdbtnType1);
-		rdbtnType1.setBounds(6, 62, 146, 23);
-		rdbtnType1.setSelected(true);
-		panelCellTypes.add(rdbtnType1);
+		listCellTypes = new JList<CellType>();
+		cellTypesModel = new DefaultListModel<CellType>();
+		cellTypesModel.addElement(new CellType("atut", "atypische Urothelzelle", Color.RED));
+		cellTypesModel.addElement(new CellType("ut"	 , "Urothelzelle normal", Color.RED));
+		cellTypesModel.addElement(new CellType("tv"	 , "Urothelzelle tumorverdächtig low grade", Color.RED));
+		cellTypesModel.addElement(new CellType("tvh" , "Urothelzelle tumorverdächtig high grade", Color.RED));
+		cellTypesModel.addElement(new CellType("pe"	 , "Plattenepithelzelle normal", Color.RED));
+		cellTypesModel.addElement(new CellType("atpe", "atypisches Plattenepithel", Color.RED));
+		cellTypesModel.addElement(new CellType("af"	 , "Artefakt", Color.RED));
+		cellTypesModel.addElement(new CellType("kr"	 , "Kristall", Color.RED));
+		cellTypesModel.addElement(new CellType("bak" , "Bakterien", Color.RED));
+		cellTypesModel.addElement(new CellType("pi"	 , "Pilze", Color.RED));
+		cellTypesModel.addElement(new CellType("leu" , "Leukozyt", Color.RED));
+		cellTypesModel.addElement(new CellType("gan" , "Granulozyt", Color.RED));
+		cellTypesModel.addElement(new CellType("ery" , "Erythrozyt", Color.RED));
+		cellTypesModel.addElement(new CellType("pla" , "Plasmazelle", Color.RED));
 		
-		JLabel lblSelectCellType = new JLabel("Select Cell Type");
-		lblSelectCellType.setBounds(6, 6, 106, 16);
-		panelCellTypes.add(lblSelectCellType);
-		lblSelectCellType.setFont(new Font("Lucida Grande", Font.BOLD, 13));
+		listCellTypes.setModel(cellTypesModel);
+		listCellTypes.setSelectedIndex(0);
 		
-		lblpx1 = new JLabel("100 px");
-		lblpx1.setBounds(164, 66, 61, 16);
-		panelCellTypes.add(lblpx1);
+		listCellTypes.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		scrollPaneCellList.setViewportView(listCellTypes);
 		
-		lblpx2 = new JLabel("200 px");
-		lblpx2.setBounds(164, 101, 61, 16);
-		panelCellTypes.add(lblpx2);
-		
-		lblpx3 = new JLabel("300 px");
-		lblpx3.setBounds(164, 136, 61, 16);
-		panelCellTypes.add(lblpx3);
-		
-		final JButton btnEdit = new JButton("Edit");
-		btnEdit.addActionListener(new ActionListener() {
+		final JButton btnRemove = new JButton("Remove");
+		btnRemove.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				String cellName = "";
-				int selectionSize = 0;
-				String selectionColor = "Red";
+				int selectedIndex = listCellTypes.getSelectedIndex();
 				
-				if (buttonGroupCellTypes.getSelection() == rdbtnType1.getModel()) {
-					cellName = rdbtnType1.getText();
-					selectionSize = Integer.parseInt(lblpx1.getText().replaceAll(" px", ""));
-					selectionColor = lblColor1.getText();
+				if (selectedIndex != -1) {
+					cellTypesModel.remove(selectedIndex);
+					
+					if (cellTypesModel.getSize() == 0) {
+						btnRemove.setEnabled(false);
+					} else { // select the next index
+						if (selectedIndex == cellTypesModel.getSize()) { // last item was removed
+							selectedIndex--;
+						}
+						listCellTypes.setSelectedIndex(selectedIndex);
+					}
 				}
-				else if (buttonGroupCellTypes.getSelection() == rdbtnType2.getModel()) {
-					cellName = rdbtnType2.getText();
-					selectionSize = Integer.parseInt(lblpx2.getText().replaceAll(" px", ""));
-					selectionColor = lblColor2.getText();
-				}
-				else if (buttonGroupCellTypes.getSelection() == rdbtnType3.getModel()) {
-					cellName = rdbtnType3.getText();
-					selectionSize = Integer.parseInt(lblpx3.getText().replaceAll(" px", ""));
-					selectionColor = lblColor3.getText();
-				}
-				
-				CellTypeEditGUI editGUI = new CellTypeEditGUI(guiReference);
-				editGUI.setEditFieldValues(cellName, selectionSize, selectionColor);
-				editGUI.setSize(290, 185);
-				editGUI.setLocation(btnEdit.getLocationOnScreen().x, btnEdit.getLocationOnScreen().y + editGUI.getLocation().y);
-				editGUI.setVisible(true);
 			}
 		});
-		btnEdit.setBounds(6, 167, 61, 29);
-		panelCellTypes.add(btnEdit);
+		btnRemove.setBounds(289, 304, 93, 29);
+		panelCellTypesList.add(btnRemove);
 		
-		lblColor1 = new JLabel("Red");
-		lblColor1.setBounds(288, 66, 61, 16);
-		panelCellTypes.add(lblColor1);
-		lblColor1.setForeground(new Color(0, 0, 0));
-		
-		lblColor2 = new JLabel("Yellow");
-		lblColor2.setBounds(288, 101, 61, 16);
-		panelCellTypes.add(lblColor2);
-		lblColor2.setForeground(new Color(0, 0, 0));
-		
-		lblColor3 = new JLabel("Orange");
-		lblColor3.setBounds(288, 136, 61, 16);
-		panelCellTypes.add(lblColor3);
-		lblColor3.setForeground(new Color(0, 0, 0));
-		
-		JLabel lblCellName = new JLabel("Cell name");
-		lblCellName.setBounds(6, 34, 146, 16);
-		panelCellTypes.add(lblCellName);
-		
-		JLabel lblSelectionSize = new JLabel("Selection size");
-		lblSelectionSize.setBounds(164, 34, 86, 16);
-		panelCellTypes.add(lblSelectionSize);
-		
-		JLabel lblSelectionColor = new JLabel("Selection color");
-		lblSelectionColor.setBounds(288, 34, 94, 16);
-		panelCellTypes.add(lblSelectionColor);
+		JButton btnAdd = new JButton("Add...");
+		btnAdd.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				AddCellTypeGUI addGUI = new AddCellTypeGUI(guiReference);
+				addGUI.setSize(300, 228);
+				addGUI.setLocation(getLocation());
+				addGUI.setVisible(true);
+				
+				if (cellTypesModel.getSize() > 0) {
+					btnRemove.setEnabled(true);
+				}
+			}
+		});
+		btnAdd.setBounds(196, 304, 81, 29);
+		panelCellTypesList.add(btnAdd);
 	}
-	
-	public void setCellTypeProperties(String cellName, int selectionSize, String selectionColor) {
-		if (buttonGroupCellTypes.getSelection() == rdbtnType1.getModel()) {
-			rdbtnType1.setText(cellName);
-			lblpx1.setText(selectionSize + " px");
-			lblColor1.setText(selectionColor);
-		}
-		else if (buttonGroupCellTypes.getSelection() == rdbtnType2.getModel()) {
-			rdbtnType2.setText(cellName);
-			lblpx2.setText(selectionSize + " px");
-			lblColor2.setText(selectionColor);
-		}
-		else if (buttonGroupCellTypes.getSelection() == rdbtnType3.getModel()) {
-			rdbtnType3.setText(cellName);
-			lblpx3.setText(selectionSize + " px");
-			lblColor3.setText(selectionColor);
-		}
+
+	public CellType getSelectedCellType() {
+		return listCellTypes.getSelectedValue();
 	}
-	
-	public CellTypeSelection getSelectedCellType() {
-		
-		String cellName;
-		int selectionSize;
-		String selectionColor;
-		
-		if (buttonGroupCellTypes.getSelection() == rdbtnType1.getModel()) {
-			cellName = rdbtnType1.getText();
-			selectionSize = Integer.parseInt(lblpx1.getText().replaceAll(" px", ""));
-			selectionColor = lblColor1.getText();
-		}
-		else if (buttonGroupCellTypes.getSelection() == rdbtnType2.getModel()) {
-			cellName = rdbtnType2.getText();
-			selectionSize = Integer.parseInt(lblpx2.getText().replaceAll(" px", ""));
-			selectionColor = lblColor2.getText();
-		}
-		else if (buttonGroupCellTypes.getSelection() == rdbtnType3.getModel()) {
-			cellName = rdbtnType3.getText();
-			selectionSize = Integer.parseInt(lblpx3.getText().replaceAll(" px", ""));
-			selectionColor = lblColor3.getText();
-		}
-		else return null;
-		
-		return new CellTypeSelection(cellName, selectionSize, selectionColor);
+
+	public void addNewCellType(CellType cellType) {
+		cellTypesModel.addElement(cellType);
 	}
 }

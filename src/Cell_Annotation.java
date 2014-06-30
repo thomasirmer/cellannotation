@@ -12,9 +12,11 @@ import ij.process.ColorProcessor;
 import ij.process.ImageProcessor;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -39,6 +41,8 @@ public class Cell_Annotation implements PlugInFilter {
 	private ImageRoi 		crosshairRoi;
 	private Graphics2D		crosshairGraphics;
 	private int				lineColor;
+	
+	private Dimension screenSize;
 
 	@Override
 	public void run(ImageProcessor ip) {
@@ -52,13 +56,16 @@ public class Cell_Annotation implements PlugInFilter {
 		origCanvas = imp.getCanvas();
 		origImagePlus = imp;
 
+		// get system properties
+		screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		
 		// initialize GUI
 		gui = new CellAnnotationGUI(this);
 		gui.setSize(400, 600);
-		gui.setLocation(origWindow.getLocation().x + origWindow.getWidth(), origWindow.getLocation().y);
+		gui.setLocation(screenSize.width - gui.getWidth(), 0);
 		gui.validate();
 		gui.setVisible(true);
-		
+			
 		// set up image stack for selection overlay
 //		selProcessor = new ByteProcessor(origImagePlus.getWidth(), origImagePlus.getHeight());
 //		selImagePlus = NewImage.createRGBImage("Selection overlay", origImagePlus.getWidth(), origImagePlus.getHeight(), 1, 0);
@@ -113,13 +120,13 @@ public class Cell_Annotation implements PlugInFilter {
 		if (IJ.getToolName().equals("rectangle")) {
 		
 			// get selection properties
-			CellTypeSelection selectionType = gui.getSelectedCellType();
+			CellType cellType = gui.getSelectedCellType();
 			
 			// get selected ROI
 			Roi selection = origImagePlus.getRoi();
 			
 			// create new image from selected area
-			ImagePlus slice = NewImage.createRGBImage(selectionType.cellName,
+			ImagePlus slice = NewImage.createRGBImage(cellType.toString(),
 													  selection.getBounds().height,
 													  selection.getBounds().width,
 													  origImagePlus.getSlice(), 0);
@@ -127,18 +134,23 @@ public class Cell_Annotation implements PlugInFilter {
 			slice.setProcessor(new ColorProcessor(selection.getBounds().width, selection.getBounds().height));
 			slice.getProcessor().insert(origProcessor, -selection.getBounds().x, -selection.getBounds().y);
 			slice.show();
-			slice.getWindow().setLocation(e.getXOnScreen(), e.getYOnScreen());
+			// show slice nicely big in the middle of the screen
+			slice.getWindow().setSize(screenSize.height/2, screenSize.height/2);
+			slice.getWindow().setLocation((screenSize.width  - slice.getWindow().getWidth()) / 2,
+										  (screenSize.height - slice.getWindow().getHeight()) / 2);
+			slice.getCanvas().fitToWindow();
 			
 			// ask if selection was ok or should be canceled
 			GenericDialog dialog = new GenericDialog("Ok?");
-			dialog.setLocation(slice.getWindow().getLocation().x, slice.getWindow().getLocation().y + slice.getWindow().getHeight());
+			dialog.setLocation((screenSize.width  - dialog.getWidth()) / 2,
+							   (screenSize.height - dialog.getHeight()) / 2);
 			dialog.showDialog();
 			
 			if (dialog.wasOKed()) {
 				
 				// draw selected ROI
 				Rectangle selectionRect = selection.getBounds();
-				selectionGraphics.setColor(selectionType.selectionColor);
+				selectionGraphics.setColor(cellType.getColor());
 				// line thickness = 2
 				selectionGraphics.drawRect(selectionRect.x - 1,
 										   selectionRect.y - 1,
@@ -149,7 +161,7 @@ public class Cell_Annotation implements PlugInFilter {
 						   				   selectionRect.width + 3,
 						   				   selectionRect.height + 3);
 				selectionGraphics.setFont(new Font("Arial", Font.PLAIN, 14));
-				selectionGraphics.drawString(String.valueOf(new Random(System.currentTimeMillis()).nextInt()),
+				selectionGraphics.drawString(cellType.toString(),
 						 			selection.getBounds().getLocation().x + 4,
 						 			selection.getBounds().getLocation().y + selection.getBounds().height - 4);
 						
@@ -207,8 +219,8 @@ public class Cell_Annotation implements PlugInFilter {
 	}
 	
 	private void adjustRoiColor(MouseEvent e) {
-		CellTypeSelection selectionType = gui.getSelectedCellType();
-		Roi.setColor(selectionType.selectionColor);
+		CellType cellType = gui.getSelectedCellType();
+		Roi.setColor(cellType.getColor());
 	}
 
 	private void drawOrientationLines(MouseEvent e) {
