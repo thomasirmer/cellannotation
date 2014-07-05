@@ -29,12 +29,15 @@ public class CellAnnotationGUI extends JFrame {
 	private JList<CellType> listCellTypes;
 	private JScrollPane scrollPaneCellList;
 	private final DefaultListModel<CellType> cellTypesModel;
+	private final SelectionManager selectionManager;
 	
 	private CellAnnotationGUI guiReference;
 	
-	public CellAnnotationGUI(final Cell_Annotation application) {
+	public CellAnnotationGUI(final Cell_Annotation application, final SelectionManager selectionManager) {
 		appReference = application;
 		guiReference = this;
+		
+		this.selectionManager = selectionManager;
 		
 		this.addWindowListener(new WindowListener() {
 			public void windowOpened(WindowEvent e) {}
@@ -83,6 +86,8 @@ public class CellAnnotationGUI extends JFrame {
 		cellTypesModel.addElement(new CellType("ery" , "Erythrozyt"								, new Color(102,102,153)));
 		cellTypesModel.addElement(new CellType("pla" , "Plasmazelle"							, new Color(0,102,102)));
 		
+		this.selectionManager.initCellTypes(cellTypesModel.toArray());
+				
 		listCellTypes.setModel(cellTypesModel);
 		listCellTypes.setSelectedIndex(0);
 		
@@ -97,6 +102,7 @@ public class CellAnnotationGUI extends JFrame {
 				
 				if (selectedIndex != -1) {
 					cellTypesModel.remove(selectedIndex);
+					selectionManager.removeCellType(selectedIndex);
 					
 					if (cellTypesModel.getSize() == 0) {
 						btnRemove.setEnabled(false);
@@ -145,5 +151,10 @@ public class CellAnnotationGUI extends JFrame {
 
 	public void addNewCellType(CellType cellType) {
 		cellTypesModel.addElement(cellType);
+		selectionManager.addCellType(cellType);
+	}
+
+	public Object[] getCellList() {
+		return this.cellTypesModel.toArray();
 	}
 }

@@ -13,6 +13,14 @@ public class CellType {
 		this.selectionColor	= selectionColor;
 	}
 	
+	public String getAbbreviation() {
+		return abbreviation;
+	}
+	
+	public String getFullName() {
+		return fullName;
+	}
+	
 	public Color getColor() {
 		return this.selectionColor;
 	}

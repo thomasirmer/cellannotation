@@ -17,6 +17,8 @@ public class AddCellTypeGUI extends JFrame {
 	private JTextField textFieldDescription;
 	private JPanel panelColor;
 	
+	private boolean colorSelected = false;
+	
 	private AddCellTypeGUI reference;
 	CellAnnotationGUI callerReference;
 	
@@ -62,6 +64,7 @@ public class AddCellTypeGUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				Color selectionColor = JColorChooser.showDialog(null, "Choose selection color", panelColor.getBackground());
 				panelColor.setBackground(selectionColor);
+				colorSelected = true;
 			}
 		});
 		btnChooseColor.setBounds(141, 114, 103, 29);
@@ -92,9 +95,16 @@ public class AddCellTypeGUI extends JFrame {
 							"Please enter a description for your cell!",
 							"Warning",
 							JOptionPane.WARNING_MESSAGE);
+				} else if (!colorSelected) {
+					JOptionPane.showMessageDialog(
+							reference,
+							"Please select a color for the cell selection!",
+							"Warning",
+							JOptionPane.WARNING_MESSAGE);
 				} else {
 					CellType cellType = new CellType(abbreviation, description, selectionColor);
 					callerReference.addNewCellType(cellType);
+					colorSelected = false;
 					dispose();
 				}
 			}

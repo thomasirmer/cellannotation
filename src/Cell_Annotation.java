@@ -38,6 +38,8 @@ public class Cell_Annotation implements PlugInFilter {
 	private Graphics2D		selectionGraphics;
 		
 	private Dimension screenSize;
+	
+	private SelectionManager selectionManager;
 
 	@Override
 	public void run(ImageProcessor ip) {
@@ -54,8 +56,11 @@ public class Cell_Annotation implements PlugInFilter {
 		// get system properties
 		screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		
+		// set up selection manager
+		selectionManager = new SelectionManager();
+		
 		// initialize GUI
-		gui = new CellAnnotationGUI(this);
+		gui = new CellAnnotationGUI(this, selectionManager);
 		gui.setSize(400, 600);
 		gui.setLocation(screenSize.width - gui.getWidth(), 0);
 		gui.validate();
@@ -72,11 +77,12 @@ public class Cell_Annotation implements PlugInFilter {
 				
 		// set up overlay for selections
 		overlays = new Overlay();
-		
 		selectionImage = new BufferedImage(origImagePlus.getWidth(), origImagePlus.getHeight(), BufferedImage.TYPE_INT_ARGB);
 		selectionRoi = new ImageRoi(0, 0, selectionImage);
 		selectionGraphics = (Graphics2D) selectionImage.getGraphics();
 		overlays.add(selectionRoi);
+		
+		origImagePlus.setOverlay(overlays);
 		
 		IJ.setTool("rectangle");
 
@@ -137,6 +143,10 @@ public class Cell_Annotation implements PlugInFilter {
 				selectionGraphics.drawString(cellType.toString(),
 						 			selection.getBounds().getLocation().x + 4,
 						 			selection.getBounds().getLocation().y + selection.getBounds().height - 4);
+				
+				selectionManager.addSelection(new CellSelection(cellType, selectionRect));
+				
+				IJ.showMessage(selectionManager.toString());
 			}
 			
 			slice.close();
