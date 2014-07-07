@@ -1,3 +1,5 @@
+import ij.IJ;
+
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
@@ -5,10 +7,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.File;
+import java.io.FilenameFilter;
 
 import javax.swing.AbstractListModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -18,6 +23,7 @@ import javax.swing.ListCellRenderer;
 import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListDataListener;
+import javax.swing.filechooser.FileFilter;
 import javax.swing.border.EtchedBorder;
 
 @SuppressWarnings("serial")
@@ -29,15 +35,17 @@ public class CellAnnotationGUI extends JFrame {
 	private JList<CellType> listCellTypes;
 	private JScrollPane scrollPaneCellList;
 	private final DefaultListModel<CellType> cellTypesModel;
-	private final SelectionManager selectionManager;
 	
+	private final SelectionManager selectionManager;
 	private CellAnnotationGUI guiReference;
+	private ImportExportManager importExportManager;
 	
 	public CellAnnotationGUI(final Cell_Annotation application, final SelectionManager selectionManager) {
 		appReference = application;
 		guiReference = this;
 		
 		this.selectionManager = selectionManager;
+		importExportManager = new ImportExportManager(selectionManager);
 		
 		this.addWindowListener(new WindowListener() {
 			public void windowOpened(WindowEvent e) {}
@@ -140,9 +148,71 @@ public class CellAnnotationGUI extends JFrame {
 		getContentPane().add(panel);
 		panel.setLayout(null);
 		
-		JLabel lblExportAnnotation = new JLabel("Export annotation");
-		lblExportAnnotation.setBounds(6, 6, 113, 16);
+		JLabel lblExportAnnotation = new JLabel("Export/Import annotation");
+		lblExportAnnotation.setFont(new Font("Lucida Grande", Font.BOLD, 13));
+		lblExportAnnotation.setBounds(6, 6, 173, 16);
 		panel.add(lblExportAnnotation);
+		
+		JLabel lblExportAsTxtFile = new JLabel("Export annotation as CSV-File");
+		lblExportAsTxtFile.setBounds(6, 75, 218, 16);
+		panel.add(lblExportAsTxtFile);
+		
+		JButton btnExportTxt = new JButton("Export...");
+		btnExportTxt.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {				
+				JFileChooser fileSaveChooser = new JFileChooser();
+				fileSaveChooser.setDialogTitle("Save as...");
+				fileSaveChooser.setSelectedFile(new File("CellAnnotation.csv"));
+				
+				int selection = fileSaveChooser.showSaveDialog(null);
+				
+				if (selection == JFileChooser.APPROVE_OPTION) {
+					if (! fileSaveChooser.getSelectedFile().getAbsolutePath().endsWith(".csv")) {
+						IJ.showMessage("You must specify a CSV-File!");
+						return;
+					} else {
+						try {
+							importExportManager.saveAnnotationAsFile(fileSaveChooser.getSelectedFile());
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+
+					}
+				}
+			}
+		});
+		btnExportTxt.setBounds(285, 70, 97, 29);
+		panel.add(btnExportTxt);
+		
+		JLabel lblImportAnnotationAs = new JLabel("Import annotation as CSV_File");
+		lblImportAnnotationAs.setBounds(6, 34, 189, 16);
+		panel.add(lblImportAnnotationAs);
+		
+		JButton btnImport = new JButton("Import...");
+		btnImport.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				JFileChooser fileOpenChooser = new JFileChooser();
+				fileOpenChooser.setDialogTitle("Open file...");
+				
+				int selection = fileOpenChooser.showOpenDialog(null);
+				
+				if (selection == JFileChooser.APPROVE_OPTION) {
+					if (! fileOpenChooser.getSelectedFile().getAbsolutePath().endsWith(".csv")) {
+						IJ.showMessage("You must chosse a CSV-File!");
+						return;
+					} else {
+						try {
+							importExportManager.openAnnotationFromFile(fileOpenChooser.getSelectedFile());
+							application.drawSelections();
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				}
+			}
+		});
+		btnImport.setBounds(285, 29, 97, 29);
+		panel.add(btnImport);
 	}
 
 	public CellType getSelectedCellType() {

@@ -1,25 +1,22 @@
 import java.awt.Rectangle;
 
 public class CellSelection {
+		
+	private CellType 	cellType;
+	private Rectangle 	selection;
+	private int 		serialNumber;
 	
-	private static int globalSerialNumber = 0;
-	
-	private CellType cellType;
-	private Rectangle selection;
-	private int serialNumber;
-	
-	public CellSelection(CellType cellType, Rectangle selection) {
-		this.cellType = cellType;
-		this.selection = selection;
-		this.serialNumber = CellSelection.globalSerialNumber;
-		CellSelection.globalSerialNumber++;
+	public CellSelection(CellType cellType, Rectangle selection, int serialNumber) {
+		this.cellType 		= cellType;
+		this.selection 		= selection;
+		this.serialNumber 	= serialNumber;
 	}
 	
 	public CellType getCellType() {
 		return this.cellType;
 	}
 	
-	public Rectangle getSelection() {
+	public Rectangle getBounds() {
 		return this.selection;
 	}
 	
@@ -27,11 +24,12 @@ public class CellSelection {
 		return this.serialNumber;
 	}
 	
-	public void setSerialNumber(int nextSerialNumber) {
-		CellSelection.globalSerialNumber = nextSerialNumber;
-	}
-	
-	public static int getGlobalSerialNumber() {
-		return CellSelection.globalSerialNumber;
+	public String toString() {
+		String description = "";
+		
+		description += cellType.getIdentifier() + ";" + serialNumber + ";" +
+					   selection.x + ";" + selection.y + ";" + selection.width + ";" + selection.height;
+		
+		return description;
 	}
 }

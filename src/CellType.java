@@ -3,18 +3,18 @@ import java.awt.Color;
 
 public class CellType {
 	
-	private String 	abbreviation;
+	private String 	identifier;
 	private String 	fullName;
 	private Color	selectionColor;
 
-	public CellType(String abbreviation, String fullName, Color selectionColor) {
-		this.abbreviation 	= abbreviation;
+	public CellType(String identifier, String fullName, Color selectionColor) {
+		this.identifier 	= identifier;
 		this.fullName 		= fullName;
 		this.selectionColor	= selectionColor;
 	}
 	
-	public String getAbbreviation() {
-		return abbreviation;
+	public String getIdentifier() {
+		return identifier;
 	}
 	
 	public String getFullName() {
@@ -26,6 +26,6 @@ public class CellType {
 	}
 	
 	public String toString() {
-		return this.abbreviation + "\t" + "(" + this.fullName + ")";
+		return this.identifier + "\t" + "(" + this.fullName + ")";
 	}
 }

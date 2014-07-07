@@ -28,13 +28,19 @@ public class SelectionManager {
 		selectionList.add(selection);
 	}
 	
-	public String toString() {
-		String msg = "";
-		
+	public int getSelectionCount() {
+		return selectionList.size();
+	}
+	
+	public ArrayList<CellSelection> getSelections() {
+		return selectionList;
+	}
+	
+	public CellType getCellTypeByIdentifier (String abbreviation) {
 		for (CellType type : cellTypeList) {
-			msg += type.getAbbreviation() + " " + type.getFullName() + "\n";
+			if (type.getIdentifier().equals(abbreviation))
+				return type;
 		}
-		
-		return msg;
+		return null;
 	}
 }
