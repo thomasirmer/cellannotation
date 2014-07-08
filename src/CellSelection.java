@@ -24,12 +24,17 @@ public class CellSelection {
 		return this.serialNumber;
 	}
 	
-	public String toString() {
+	public String getExportDescription() {
 		String description = "";
 		
 		description += cellType.getIdentifier() + ";" + serialNumber + ";" +
 					   selection.x + ";" + selection.y + ";" + selection.width + ";" + selection.height;
 		
 		return description;
+	}
+	
+	public String toString() {
+		// TODO toString method for listModel
+		return "";
 	}
 }

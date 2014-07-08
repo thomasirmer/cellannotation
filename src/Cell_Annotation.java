@@ -3,7 +3,6 @@ import ij.ImagePlus;
 import ij.gui.GenericDialog;
 import ij.gui.ImageCanvas;
 import ij.gui.ImageRoi;
-import ij.gui.ImageWindow;
 import ij.gui.NewImage;
 import ij.gui.Overlay;
 import ij.gui.Roi;
@@ -61,7 +60,7 @@ public class Cell_Annotation implements PlugInFilter {
 		
 		// gui
 		gui = new CellAnnotationGUI(this, selectionManager);
-		gui.setSize(400, 600);
+		gui.setSize(400, 700);
 		gui.setLocation(screenSize.width - gui.getWidth(), 0);
 		gui.validate();
 		gui.setVisible(true);

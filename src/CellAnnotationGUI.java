@@ -16,26 +16,45 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.EtchedBorder;
 
 @SuppressWarnings("serial")
 public class CellAnnotationGUI extends JFrame {
 	
-	private Cell_Annotation appReference;
-	
-	private JPanel panelCellTypesList;
-	private JList<CellType> listCellTypes;
-	private JScrollPane scrollPaneCellList;
+	// plugin class references
+	private final Cell_Annotation 	  appReference;
+	private final SelectionManager 	  selectionManager;
+	private final ImportExportManager importExportManager;
+
+	// top panel: cell type list
+	private final JPanel panelCellTypesList;
+	private final JLabel lblCellTypeList;
+	private final JScrollPane scrollPaneCellList;
+	private final JList<CellType> listCellTypes;
 	private final DefaultListModel<CellType> cellTypesModel;
-	
-	private final SelectionManager selectionManager;
-	private CellAnnotationGUI guiReference;
-	private ImportExportManager importExportManager;
-	
+
+	// middle panel: export / import
+	private final JPanel panelExportImport;
+	private final JLabel lblExportAsTxtFile;
+	private final JLabel lblExportAnnotation;
+	private final JLabel lblImportAnnotation;
+	private final JButton btnExport;
+	private final JButton btnImport;
+
+	// bottom panel: annotated cells
+	private final JPanel panelAnnotatedCells;
+	private final JLabel lblAnnotatedCells;
+	private final JScrollPane scrollPaneAnnotatedCells;
+	private final JList<CellSelection> listAnnotatedCells;
+	private final DefaultListModel<CellSelection> annotatedCellsModel;
+	private final JLabel lblSearchCell;
+	private final JTextField textFieldSearch;
+	private final JButton btnDelete;	
+
 	public CellAnnotationGUI(final Cell_Annotation application, final SelectionManager selectionManager) {
 		appReference = application;
-		guiReference = this;
 		
 		this.selectionManager = selectionManager;
 		importExportManager = new ImportExportManager(selectionManager);
@@ -56,17 +75,17 @@ public class CellAnnotationGUI extends JFrame {
 		
 		panelCellTypesList = new JPanel();
 		panelCellTypesList.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		panelCellTypesList.setBounds(6, 6, 388, 339);
+		panelCellTypesList.setBounds(6, 6, 388, 281);
 		getContentPane().add(panelCellTypesList);
 		panelCellTypesList.setLayout(null);
 		
-		JLabel lblSelectCellTypeList = new JLabel("Select Cell Type");
-		lblSelectCellTypeList.setBounds(6, 6, 106, 16);
-		lblSelectCellTypeList.setFont(new Font("Lucida Grande", Font.BOLD, 13));
-		panelCellTypesList.add(lblSelectCellTypeList);
+		lblCellTypeList = new JLabel("Select Cell Type");
+		lblCellTypeList.setBounds(6, 6, 106, 16);
+		lblCellTypeList.setFont(new Font("Lucida Grande", Font.BOLD, 13));
+		panelCellTypesList.add(lblCellTypeList);
 		
 		scrollPaneCellList = new JScrollPane();
-		scrollPaneCellList.setBounds(6, 34, 376, 258);
+		scrollPaneCellList.setBounds(6, 34, 376, 242);
 		panelCellTypesList.add(scrollPaneCellList);
 		
 		listCellTypes = new JList<CellType>();
@@ -88,70 +107,30 @@ public class CellAnnotationGUI extends JFrame {
 		cellTypesModel.addElement(new CellType("pla" , "Plasmazelle"							, new Color(0,102,102)));
 		
 		this.selectionManager.initCellTypes(cellTypesModel.toArray());
-				
+		
 		listCellTypes.setModel(cellTypesModel);
 		listCellTypes.setSelectedIndex(0);
 		
 		listCellTypes.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		scrollPaneCellList.setViewportView(listCellTypes);
 		
-		final JButton btnRemove = new JButton("Remove");
-		btnRemove.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-				int selectedIndex = listCellTypes.getSelectedIndex();
-				
-				if (selectedIndex != -1) {
-					cellTypesModel.remove(selectedIndex);
-					selectionManager.removeCellType(selectedIndex);
-					
-					if (cellTypesModel.getSize() == 0) {
-						btnRemove.setEnabled(false);
-					} else { // select the next index
-						if (selectedIndex == cellTypesModel.getSize()) { // last item was removed
-							selectedIndex--;
-						}
-						listCellTypes.setSelectedIndex(selectedIndex);
-					}
-				}
-			}
-		});
-		btnRemove.setBounds(289, 304, 93, 29);
-		panelCellTypesList.add(btnRemove);
+		panelExportImport = new JPanel();
+		panelExportImport.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		panelExportImport.setBounds(6, 299, 388, 83);
+		getContentPane().add(panelExportImport);
+		panelExportImport.setLayout(null);
 		
-		JButton btnAdd = new JButton("Add...");
-		btnAdd.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				AddCellTypeGUI addGUI = new AddCellTypeGUI(guiReference);
-				addGUI.setSize(300, 228);
-				addGUI.setLocation(getLocation());
-				addGUI.setVisible(true);
-				
-				if (cellTypesModel.getSize() > 0) {
-					btnRemove.setEnabled(true);
-				}
-			}
-		});
-		btnAdd.setBounds(196, 304, 81, 29);
-		panelCellTypesList.add(btnAdd);
-		
-		JPanel panel = new JPanel();
-		panel.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		panel.setBounds(6, 357, 388, 215);
-		getContentPane().add(panel);
-		panel.setLayout(null);
-		
-		JLabel lblExportAnnotation = new JLabel("Export/Import annotation");
+		lblExportAnnotation = new JLabel("Export/Import annotation");
 		lblExportAnnotation.setFont(new Font("Lucida Grande", Font.BOLD, 13));
 		lblExportAnnotation.setBounds(6, 6, 173, 16);
-		panel.add(lblExportAnnotation);
+		panelExportImport.add(lblExportAnnotation);
 		
-		JLabel lblExportAsTxtFile = new JLabel("Export annotation as CSV-File");
-		lblExportAsTxtFile.setBounds(6, 75, 218, 16);
-		panel.add(lblExportAsTxtFile);
+		lblExportAsTxtFile = new JLabel("Export annotation as CSV-File");
+		lblExportAsTxtFile.setBounds(6, 29, 218, 16);
+		panelExportImport.add(lblExportAsTxtFile);
 		
-		JButton btnExportTxt = new JButton("Export...");
-		btnExportTxt.addActionListener(new ActionListener() {
+		btnExport = new JButton("Export...");
+		btnExport.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {				
 				JFileChooser fileSaveChooser = new JFileChooser();
 				fileSaveChooser.setDialogTitle("Save as...");
@@ -174,14 +153,10 @@ public class CellAnnotationGUI extends JFrame {
 				}
 			}
 		});
-		btnExportTxt.setBounds(285, 70, 97, 29);
-		panel.add(btnExportTxt);
+		btnExport.setBounds(285, 52, 97, 29);
+		panelExportImport.add(btnExport);
 		
-		JLabel lblImportAnnotationAs = new JLabel("Import annotation as CSV_File");
-		lblImportAnnotationAs.setBounds(6, 34, 189, 16);
-		panel.add(lblImportAnnotationAs);
-		
-		JButton btnImport = new JButton("Import...");
+		btnImport = new JButton("Import...");
 		btnImport.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				JFileChooser fileOpenChooser = new JFileChooser();
@@ -204,8 +179,46 @@ public class CellAnnotationGUI extends JFrame {
 				}
 			}
 		});
-		btnImport.setBounds(285, 29, 97, 29);
-		panel.add(btnImport);
+		btnImport.setBounds(285, 24, 97, 29);
+		panelExportImport.add(btnImport);
+		
+		lblImportAnnotation = new JLabel("Import annotation as CSV_File");
+		lblImportAnnotation.setBounds(6, 57, 189, 16);
+		panelExportImport.add(lblImportAnnotation);
+		
+		panelAnnotatedCells = new JPanel();
+		panelAnnotatedCells.setBounds(6, 394, 388, 278);
+		getContentPane().add(panelAnnotatedCells);
+		panelAnnotatedCells.setLayout(null);
+		
+		lblAnnotatedCells = new JLabel("Annotated cells");
+		lblAnnotatedCells.setFont(new Font("Lucida Grande", Font.BOLD, 13));
+		lblAnnotatedCells.setBounds(6, 6, 105, 16);
+		panelAnnotatedCells.add(lblAnnotatedCells);
+		
+		textFieldSearch = new JTextField();
+		textFieldSearch.setBounds(85, 244, 201, 28);
+		panelAnnotatedCells.add(textFieldSearch);
+		textFieldSearch.setColumns(10);
+		
+		lblSearchCell = new JLabel("Search cell");
+		lblSearchCell.setBounds(6, 250, 67, 16);
+		panelAnnotatedCells.add(lblSearchCell);
+		
+		btnDelete = new JButton("Delete");
+		btnDelete.setBounds(298, 245, 84, 29);
+		panelAnnotatedCells.add(btnDelete);
+		
+		scrollPaneAnnotatedCells = new JScrollPane();
+		scrollPaneAnnotatedCells.setBounds(6, 34, 376, 204);
+		panelAnnotatedCells.add(scrollPaneAnnotatedCells);
+		
+		listAnnotatedCells = new JList<CellSelection>();
+		
+		annotatedCellsModel = new DefaultListModel<CellSelection>();
+				
+		listAnnotatedCells.setModel(annotatedCellsModel);
+		scrollPaneAnnotatedCells.setViewportView(listAnnotatedCells);
 	}
 
 	public CellType getSelectedCellType() {
@@ -219,5 +232,9 @@ public class CellAnnotationGUI extends JFrame {
 
 	public Object[] getCellList() {
 		return this.cellTypesModel.toArray();
+	}
+	
+	public void updateAnnotatedCellsList() {
+		// TODO update listModel with selectionManager
 	}
 }
