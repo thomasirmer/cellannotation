@@ -18,7 +18,7 @@
 		<link>
 			<name>MyPlugins</name>
 			<type>2</type>
-			<location>/Applications/ImageJ/plugins/MyPlugins</location>
+			<location>/Applications/ImageJ/plugins/MyPlugIns</location>
 		</link>
 	</linkedResources>
 </projectDescription>
