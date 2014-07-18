@@ -45,6 +45,7 @@ public class ImportExportManager {
 				
 				Rectangle selection = new Rectangle(locX, locY, width, height);
 				selectionManager.addSelection(new CellSelection(type, selection, serial));
+				selectionManager.updateSerial();
 			}
 		}
 		

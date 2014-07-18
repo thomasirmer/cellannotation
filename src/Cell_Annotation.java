@@ -47,7 +47,13 @@ public class Cell_Annotation implements PlugInFilter {
 	}
 
 	public int setup(String arg, ImagePlus imp) {
-
+		
+		if (imp == null) {
+			IJ.showMessage("Please open an image first!");
+			Thread.currentThread().interrupt();
+			return -1;
+		}
+		
 		// cell image
 		imgCanvas = imp.getCanvas();
 		imgPlus   = imp;
@@ -91,6 +97,16 @@ public class Cell_Annotation implements PlugInFilter {
 			imgCanvas.removeMouseListener(listener);
 		}
 		
+		gui 			  = null;
+		selectionManager  = null;
+		imgCanvas		  = null;
+		imgPlus			  = null;
+		imgProcessor	  = null;
+		selectionImage	  = null;
+		selectionOverlay  = null;
+		selectionRoi	  = null;
+		selectionGraphics = null;
+		
 		System.gc();
 	}
 
@@ -110,9 +126,10 @@ public class Cell_Annotation implements PlugInFilter {
 			dialog.showDialog();
 			
 			if (dialog.wasOKed()) {
-				CellSelection cellSelection = new CellSelection(cellType, selectionRect, selectionManager.getSelectionCount());
-				drawSelection(cellType, cellSelection);
+				CellSelection cellSelection = new CellSelection(cellType, selectionRect);
 				selectionManager.addSelection(cellSelection);
+				drawSelection(cellType, cellSelection);
+				gui.addAnnotatedCellsToList(cellSelection);
 			}
 			
 			slice.close();
@@ -172,6 +189,16 @@ public class Cell_Annotation implements PlugInFilter {
 
 	public void drawSelections() {
 		
+		// first clear image
+		imgPlus.setOverlay(null);
+		imgPlus.updateAndDraw();
+		selectionImage 		= new BufferedImage(imgPlus.getWidth(), imgPlus.getHeight(), BufferedImage.TYPE_INT_ARGB);
+		selectionGraphics 	= (Graphics2D) selectionImage.getGraphics();
+		selectionRoi 		= new ImageRoi(0, 0, selectionImage);
+		selectionOverlay 	= new Overlay();
+		selectionOverlay.add(selectionRoi);
+		imgPlus.setOverlay(selectionOverlay);
+	
 		// draw all selection
 		for (CellSelection selection : selectionManager.getSelections()) {
 			drawSelection(selection.getCellType(), selection);

@@ -6,12 +6,18 @@ public class CellSelection {
 	private Rectangle 	selection;
 	private int 		serialNumber;
 	
-	public CellSelection(CellType cellType, Rectangle selection, int serialNumber) {
+	public CellSelection(CellType cellType, Rectangle selection) {
 		this.cellType 		= cellType;
 		this.selection 		= selection;
-		this.serialNumber 	= serialNumber;
+		this.serialNumber	= SelectionManager.getNextSerialNumber();
 	}
 	
+	public CellSelection(CellType cellType, Rectangle selection, int serial) {
+		this.cellType 		= cellType;
+		this.selection 		= selection;
+		this.serialNumber	= serial;
+	}
+		
 	public CellType getCellType() {
 		return this.cellType;
 	}
@@ -34,7 +40,8 @@ public class CellSelection {
 	}
 	
 	public String toString() {
-		// TODO toString method for listModel
-		return "";
+		String description = "";
+		description += cellType.getIdentifier() + "_" + serialNumber;
+		return description;
 	}
 }

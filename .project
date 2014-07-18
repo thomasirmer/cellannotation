@@ -16,9 +16,14 @@
 	</natures>
 	<linkedResources>
 		<link>
-			<name>MyPlugins</name>
+			<name>CellAnnotation</name>
 			<type>2</type>
-			<location>/Applications/ImageJ/plugins/MyPlugIns</location>
+			<location>/Applications/ImageJ/plugins/CellAnnotation</location>
+		</link>
+		<link>
+			<name>lib</name>
+			<type>2</type>
+			<location>/Users/thomasirmer/Documents/DropBox/Dropbox/Eclipse_Workspace_Java/lib</location>
 		</link>
 	</linkedResources>
 </projectDescription>

@@ -4,6 +4,8 @@ public class SelectionManager {
 	
 	private ArrayList<CellType> cellTypeList;
 	private ArrayList<CellSelection> selectionList;
+	
+	private static int serialNumber = 0;
 
 	public SelectionManager() {
 		cellTypeList = new ArrayList<CellType>();
@@ -28,19 +30,34 @@ public class SelectionManager {
 		selectionList.add(selection);
 	}
 	
-	public int getSelectionCount() {
-		return selectionList.size();
+	public static int getNextSerialNumber() {
+		int currentNumber = serialNumber;
+		serialNumber++;
+		return currentNumber;
 	}
 	
 	public ArrayList<CellSelection> getSelections() {
 		return selectionList;
 	}
 	
-	public CellType getCellTypeByIdentifier (String abbreviation) {
+	public CellType getCellTypeByIdentifier (String id) {
 		for (CellType type : cellTypeList) {
-			if (type.getIdentifier().equals(abbreviation))
+			if (type.getIdentifier().equals(id))
 				return type;
 		}
 		return null;
+	}
+	
+	public void remove(CellSelection cellSelection) {
+		selectionList.remove(cellSelection);
+	}
+
+	public void updateSerial() {
+		for (CellSelection selection : selectionList) {
+			serialNumber = Math.max(selection.getSerialNumber(), serialNumber);
+		}
+		if (selectionList.size() > 0) {
+			serialNumber++;
+		}
 	}
 }
