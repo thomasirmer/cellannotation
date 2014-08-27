@@ -83,7 +83,7 @@ public class CellAnnotationGUI extends JFrame {
 		panelCellTypesList.setLayout(null);
 
 		lblCellTypeList = new JLabel("Select Cell Type");
-		lblCellTypeList.setBounds(6, 6, 106, 16);
+		lblCellTypeList.setBounds(6, 6, 230, 16);
 		lblCellTypeList.setFont(new Font("Lucida Grande", Font.BOLD, 13));
 		panelCellTypesList.add(lblCellTypeList);
 
@@ -126,7 +126,7 @@ public class CellAnnotationGUI extends JFrame {
 
 		lblExportAnnotation = new JLabel("Export/Import annotation");
 		lblExportAnnotation.setFont(new Font("Lucida Grande", Font.BOLD, 13));
-		lblExportAnnotation.setBounds(6, 6, 173, 16);
+		lblExportAnnotation.setBounds(6, 6, 218, 16);
 		panelExportImport.add(lblExportAnnotation);
 
 		lblExportAsTxtFile = new JLabel("Export annotation as CSV-File");
@@ -138,7 +138,7 @@ public class CellAnnotationGUI extends JFrame {
 			public void actionPerformed(ActionEvent event) {
 				JFileChooser fileSaveChooser = new JFileChooser();
 				fileSaveChooser.setDialogTitle("Save as...");
-				fileSaveChooser.setSelectedFile(new File("CellAnnotation.csv"));
+				fileSaveChooser.setSelectedFile(new File(application.getFileName() + ".csv"));
 
 				int selection = fileSaveChooser.showSaveDialog(null);
 
@@ -193,7 +193,7 @@ public class CellAnnotationGUI extends JFrame {
 		panelExportImport.add(btnImport);
 
 		lblImportAnnotation = new JLabel("Import annotation as CSV-File");
-		lblImportAnnotation.setBounds(6, 29, 195, 16);
+		lblImportAnnotation.setBounds(6, 29, 218, 16);
 		panelExportImport.add(lblImportAnnotation);
 
 		panelAnnotatedCells = new JPanel();
@@ -203,7 +203,7 @@ public class CellAnnotationGUI extends JFrame {
 
 		lblAnnotatedCells = new JLabel("Annotated cells");
 		lblAnnotatedCells.setFont(new Font("Lucida Grande", Font.BOLD, 13));
-		lblAnnotatedCells.setBounds(6, 6, 105, 16);
+		lblAnnotatedCells.setBounds(6, 6, 227, 16);
 		panelAnnotatedCells.add(lblAnnotatedCells);
 
 		textFieldSearch = new JTextField();
@@ -217,12 +217,12 @@ public class CellAnnotationGUI extends JFrame {
 				listAnnotatedCells.ensureIndexIsVisible(listAnnotatedCells.getSelectedIndex());
 			}
 		});
-		textFieldSearch.setBounds(59, 244, 227, 28);
+		textFieldSearch.setBounds(65, 244, 221, 28);
 		panelAnnotatedCells.add(textFieldSearch);
 		textFieldSearch.setColumns(10);
 
 		lblSearch = new JLabel("Search");
-		lblSearch.setBounds(6, 250, 41, 16);
+		lblSearch.setBounds(6, 250, 59, 16);
 		panelAnnotatedCells.add(lblSearch);
 
 		btnDelete = new JButton("Delete");

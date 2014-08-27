@@ -38,11 +38,11 @@ public class Cell_Annotation implements PlugInFilter {
 		
 	// other
 	private Dimension screenSize;
+	private String 	  fileName;
 	
 	public void run(ImageProcessor ip) {
 		
 		imgProcessor = ip;
-		
 		IJ.setTool("rectangle");
 	}
 
@@ -54,6 +54,10 @@ public class Cell_Annotation implements PlugInFilter {
 			return -1;
 		}
 		
+		// file information
+		fileName = imp.getTitle();
+		fileName = fileName.substring(0, fileName.lastIndexOf("."));
+		
 		// cell image
 		imgCanvas = imp.getCanvas();
 		imgPlus   = imp;
@@ -64,7 +68,7 @@ public class Cell_Annotation implements PlugInFilter {
 		// selection manager
 		selectionManager = new SelectionManager();
 		
-		// gui
+		// GUI
 		gui = new CellAnnotationGUI(this, selectionManager);
 		gui.setSize(400, 700);
 		gui.setLocation(screenSize.width - gui.getWidth(), 0);
@@ -204,6 +208,10 @@ public class Cell_Annotation implements PlugInFilter {
 			drawSelection(selection.getCellType(), selection);
 		}
 		imgPlus.updateAndDraw();
+	}
+	
+	public String getFileName() {
+		return fileName;
 	}
 }
 

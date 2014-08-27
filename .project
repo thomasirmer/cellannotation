@@ -16,14 +16,14 @@
 	</natures>
 	<linkedResources>
 		<link>
+			<name>Bioinf</name>
+			<type>2</type>
+			<location>/bph/home/thoirm/Documents/Dev/eclipseWorkspace/ImageJ/plugins/Bioinf</location>
+		</link>
+		<link>
 			<name>CellAnnotation</name>
 			<type>2</type>
 			<location>/Applications/ImageJ/plugins/CellAnnotation</location>
-		</link>
-		<link>
-			<name>lib</name>
-			<type>2</type>
-			<location>/Users/thomasirmer/Documents/DropBox/Dropbox/Eclipse_Workspace_Java/lib</location>
 		</link>
 	</linkedResources>
 </projectDescription>
