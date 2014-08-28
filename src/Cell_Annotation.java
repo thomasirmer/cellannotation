@@ -10,6 +10,7 @@ import ij.plugin.filter.PlugInFilter;
 import ij.process.ColorProcessor;
 import ij.process.ImageProcessor;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics2D;
@@ -110,6 +111,8 @@ public class Cell_Annotation implements PlugInFilter {
 		selectionOverlay  = null;
 		selectionRoi	  = null;
 		selectionGraphics = null;
+		
+		Roi.setColor(Color.YELLOW);
 		
 		System.gc();
 	}

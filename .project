@@ -20,10 +20,5 @@
 			<type>2</type>
 			<location>/bph/home/thoirm/Documents/Dev/eclipseWorkspace/ImageJ/plugins/Bioinf</location>
 		</link>
-		<link>
-			<name>CellAnnotation</name>
-			<type>2</type>
-			<location>/Applications/ImageJ/plugins/CellAnnotation</location>
-		</link>
 	</linkedResources>
 </projectDescription>

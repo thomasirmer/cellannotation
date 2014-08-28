@@ -94,20 +94,20 @@ public class CellAnnotationGUI extends JFrame {
 		listCellTypes = new JList<CellType>();
 
 		cellTypesModel = new DefaultListModel<CellType>();
-		cellTypesModel.addElement(new CellType("ut", 	"Urothelzelle normal", new Color(23, 82, 125)));
-		cellTypesModel.addElement(new CellType("atut", 	"atypische Urothelzelle", new Color(204, 102, 0)));
-		cellTypesModel.addElement(new CellType("tv", 	"Urothelzelle tumorverdächtig low grade", new Color(204, 51, 0)));
-		cellTypesModel.addElement(new CellType("tvh",	"Urothelzelle tumorverdächtig high grade", new Color(204, 0, 0)));
-		cellTypesModel.addElement(new CellType("pe",	"Plattenepithelzelle normal", new Color(51, 102, 0)));
-		cellTypesModel.addElement(new CellType("atpe",	"atypisches Plattenepithel", new Color(204, 153, 0)));
-		cellTypesModel.addElement(new CellType("af", 	"Artefakt", new Color(51,51, 51)));
-		cellTypesModel.addElement(new CellType("kr", 	"Kristall", new Color(0,53, 96)));
-		cellTypesModel.addElement(new CellType("bak", 	"Bakterien", new Color(204, 0, 153)));
-		cellTypesModel.addElement(new CellType("pi", 	"Pilze", new Color(153,102, 51)));
-		cellTypesModel.addElement(new CellType("leu", 	"Leukozyt", new Color(0,102, 0)));
-		cellTypesModel.addElement(new CellType("gan", 	"Granulozyt", new Color(51, 102, 51)));
-		cellTypesModel.addElement(new CellType("ery", 	"Erythrozyt", new Color(102, 102, 153)));
-		cellTypesModel.addElement(new CellType("pla", 	"Plasmazelle", new Color(0, 102, 102)));
+		cellTypesModel.addElement(new CellType("ut", 	"Urothelzelle normal", new Color(175, 122, 11)));
+		cellTypesModel.addElement(new CellType("atut", 	"atypische Urothelzelle", new Color(175, 122, 11)));
+		cellTypesModel.addElement(new CellType("tv", 	"Urothelzelle tumorverdächtig low grade", new Color(175, 11, 11)));
+		cellTypesModel.addElement(new CellType("tvh",	"Urothelzelle tumorverdächtig high grade", new Color(175, 11, 11)));
+		cellTypesModel.addElement(new CellType("pe",	"Plattenepithelzelle normal", new Color(20, 46, 118)));
+		cellTypesModel.addElement(new CellType("atpe",	"atypisches Plattenepithel", new Color(20, 46, 118)));
+		cellTypesModel.addElement(new CellType("af", 	"Artefakt", new Color(9, 140, 9)));
+		cellTypesModel.addElement(new CellType("kr", 	"Kristall", new Color(9, 140, 9)));
+		cellTypesModel.addElement(new CellType("bak", 	"Bakterien", new Color(9, 140, 9)));
+		cellTypesModel.addElement(new CellType("pi", 	"Pilze", new Color(9, 140, 9)));
+		cellTypesModel.addElement(new CellType("leu", 	"Leukozyt", new Color(9, 140, 9)));
+		cellTypesModel.addElement(new CellType("gan", 	"Granulozyt", new Color(9, 140, 9)));
+		cellTypesModel.addElement(new CellType("ery", 	"Erythrozyt", new Color(9, 140, 9)));
+		cellTypesModel.addElement(new CellType("pla", 	"Plasmazelle", new Color(9, 140, 9)));
 
 		this.selectionManager.initCellTypes(cellTypesModel.toArray());
 
