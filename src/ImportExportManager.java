@@ -17,7 +17,7 @@ public class ImportExportManager {
 		String fileContent = "CellType;SerialNumber;TopLeftX;TopLeftY;Width;Height" + "\n";
 		
 		for (CellSelection selection : selectionManager.getSelections()) {
-			fileContent += selection.toString() + "\n";
+			fileContent += selection.getExportDescription() + "\n";
 		}
 		// Print to given file
 		PrintWriter writer;
